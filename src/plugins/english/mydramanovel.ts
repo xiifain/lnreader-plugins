@@ -10,7 +10,7 @@ class MyDramaNovel implements Plugin.PluginBase {
   icon = 'src/en/mydramanovel/icon.png';
   site = 'https://mydramanovel.com/';
 
-  parseNovels(loadedCheerio: CheerioAPI) {
+  async parseNovels(loadedCheerio: CheerioAPI) {
     const novels: Plugin.NovelItem[] = [];
 
     loadedCheerio('.td-ct-item').each((i, el) => {
@@ -24,9 +24,15 @@ class MyDramaNovel implements Plugin.PluginBase {
         cover: defaultCover,
         path: novelUrl.replace(this.site, ''),
       };
-
       novels.push(novel);
     });
+
+    await Promise.all(
+      novels.map(async novel => {
+        const parsedNovel = await this.parseNovel(novel.path);
+        novel.cover = parsedNovel.cover ?? defaultCover;
+      }),
+    );
 
     return novels;
   }
@@ -45,10 +51,16 @@ class MyDramaNovel implements Plugin.PluginBase {
 
     const loadedCheerio = parseHTML(body);
 
+    const cover =
+      loadedCheerio('.td_module_flex_6')
+        .find('a')
+        .find('span')
+        .attr('data-img-url') || defaultCover;
+
     const novel: Plugin.SourceNovel = {
       path: novelPath,
       name: loadedCheerio('.tdb-title-text').text().trim() || 'Untitled',
-      cover: defaultCover,
+      cover: cover,
       summary: '',
       chapters: [],
     };
