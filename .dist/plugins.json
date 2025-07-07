@@ -725,7 +725,7 @@
 		"name": "My Drama Novel",
 		"site": "https://mydramanovel.com/",
 		"lang": "English",
-		"version": "0.0.3",
+		"version": "0.0.4",
 		"url": "https://raw.githubusercontent.com/xiifain/lnreader-plugins/plugins/v3.0.0/.js/src/plugins/english/mydramanovel.js",
 		"iconUrl": "https://raw.githubusercontent.com/xiifain/lnreader-plugins/plugins/v3.0.0/public/static/src/en/mydramanovel/icon.png"
 	},
